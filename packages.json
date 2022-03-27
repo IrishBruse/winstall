@@ -14,9 +14,6 @@
 					"PackageIdentifier": "Ditto.Ditto"
 				},
 				{
-					"PackageIdentifier": "Docker.DockerDesktop"
-				},
-				{
 					"PackageIdentifier": "Git.Git"
 				},
 				{
