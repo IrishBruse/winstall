@@ -3,6 +3,10 @@ Write-Host "Install the microsoft store for Winget will pause for 20 Seconds"
     Start-Sleep -Seconds 20
     WSReset -i
 
+Write-Host "Install Visual C"
+    Invoke-WebRequest -Uri "https://aka.ms/vs/17/release/vc_redist.x86.exe"
+    ./vc_redist.x86.exe
+
 Write-Host "Install Winget package manager"
     Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile ./Winget.msixbundle
     add-appxpackage -Path ./Winget.msixbundle
