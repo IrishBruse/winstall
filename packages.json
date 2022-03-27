@@ -1,0 +1,131 @@
+{
+	"$schema": "https://aka.ms/winget-packages.schema.2.0.json",
+	"CreationDate": "2022-03-27T21:38:29.750-00:00",
+	"Sources": [
+		{
+			"Packages": [
+				{
+					"PackageIdentifier": "TGRMNSoftware.BulkRenameUtility"
+				},
+				{
+					"PackageIdentifier": "Discord.Discord"
+				},
+				{
+					"PackageIdentifier": "Ditto.Ditto"
+				},
+				{
+					"PackageIdentifier": "Docker.DockerDesktop"
+				},
+				{
+					"PackageIdentifier": "Git.Git"
+				},
+				{
+					"PackageIdentifier": "LLVM.LLVM"
+				},
+				{
+					"PackageIdentifier": "Microsoft.Edge"
+				},
+				{
+					"PackageIdentifier": "Microsoft.EdgeWebView2Runtime"
+				},
+				{
+					"PackageIdentifier": "Microsoft.WingetCreate"
+				},
+				{
+					"PackageIdentifier": "Rufus.Rufus"
+				},
+				{
+					"PackageIdentifier": "Microsoft.Teams"
+				},
+				{
+					"PackageIdentifier": "UnityTechnologies.Unity.2020"
+				},
+				{
+					"PackageIdentifier": "UnityTechnologies.UnityHub"
+				},
+				{
+					"PackageIdentifier": "AntibodySoftware.WizTree"
+				},
+				{
+					"PackageIdentifier": "deepnight.LDtk"
+				},
+				{
+					"PackageIdentifier": "Microsoft.VC++2013Redist-x64"
+				},
+				{
+					"PackageIdentifier": "SoftDeluxe.FreeDownloadManager"
+				},
+				{
+					"PackageIdentifier": "OpenJS.NodeJS.LTS"
+				},
+				{
+					"PackageIdentifier": "Microsoft.VC++2010Redist-x64"
+				},
+				{
+					"PackageIdentifier": "7zip.7zip"
+				},
+				{
+					"PackageIdentifier": "clsid2.mpc-hc"
+				},
+				{
+					"PackageIdentifier": "Microsoft.VC++2015-2022Redist-x64"
+				},
+				{
+					"PackageIdentifier": "Microsoft.VC++2015-2022Redist-x86"
+				},
+				{
+					"PackageIdentifier": "Microsoft.CLRTypesSQLServer.2019"
+				},
+				{
+					"PackageIdentifier": "Microsoft.Teams"
+				},
+				{
+					"PackageIdentifier": "Microsoft.VisualStudioCode"
+				},
+				{
+					"PackageIdentifier": "Microsoft.dotnetRuntime.6-x64"
+				},
+				{
+					"PackageIdentifier": "FrancescoSorge.PasteIntoFile"
+				},
+				{
+					"PackageIdentifier": "Microsoft.dotnet"
+				},
+				{
+					"PackageIdentifier": "Microsoft.VC++2013Redist-x64"
+				},
+				{
+					"PackageIdentifier": "Alacritty.Alacritty"
+				},
+				{
+					"PackageIdentifier": "gerardog.gsudo"
+				},
+				{
+					"PackageIdentifier": "GoLang.Go"
+				},
+				{
+					"PackageIdentifier": "Python.Python.3"
+				},
+				{
+					"PackageIdentifier": "Microsoft.dotnetRuntime.5-x64"
+				},
+				{
+					"PackageIdentifier": "Microsoft.dotnetRuntime.3-x64"
+				},
+				{
+					"PackageIdentifier": "Klocman.BulkCrapUninstaller"
+				},
+				{
+					"PackageIdentifier": "Microsoft.VC++2013Redist-x64"
+				}
+			],
+			"SourceDetails": {
+				"Argument": "https://winget.azureedge.net/cache",
+				"Identifier": "Microsoft.Winget.Source_8wekyb3d8bbwe",
+				"Name": "winget",
+				"Type": "Microsoft.PreIndexed.Package"
+			}
+		}
+	],
+	"WinGetVersion": "1.2.10271"
+}
