@@ -35,9 +35,6 @@
 					"PackageIdentifier": "Microsoft.Teams"
 				},
 				{
-					"PackageIdentifier": "UnityTechnologies.Unity.2020"
-				},
-				{
 					"PackageIdentifier": "UnityTechnologies.UnityHub"
 				},
 				{
