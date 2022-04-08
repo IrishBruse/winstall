@@ -1,8 +1,3 @@
-Write-Host "Install the microsoft store for Winget will pause for 20 Seconds"
-    WSReset -i
-    Start-Sleep -Seconds 20
-    WSReset -i
-
 Write-Host "Install Visual C"
     Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "./Microsoft.VCLibs.x64.14.00.Desktop.appx"
     add-appxpackage -Path "./Microsoft.VCLibs.x64.14.00.Desktop.appx"
