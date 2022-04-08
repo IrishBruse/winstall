@@ -19,7 +19,6 @@ Write-Host "Running Windows Customization Registry"
     Set-ItemProperty "HKCU:\Software\Microsoft\Windows\DWM" ColorPrevalence 1
     Set-ItemProperty "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" HideRecentlyAddedApps 1 # Disable "Recently added"
     Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\sppsvc\" Start 4
-    Stop-Process -processname explorer
 
 Write-Host "Removing File Explorer Folders"
     Write-Host "Remove Desktop From This PC"
@@ -65,7 +64,6 @@ Write-Host "Removing File Explorer Folders"
     Set-ItemProperty $explorerAdvancedKey MMTaskbarMode 2 # Taskbar where window is open
     Set-ItemProperty $explorerAdvancedKey ShowSuperHidden 0
     Set-ItemProperty $explorerAdvancedKey TaskbarGlomLevel 2 # Dont Combine Taskbar
-    Set-ItemProperty $explorerAdvancedKey TaskbarSmallIcons 1 # Small taskbar
 
 Write-Host "Setting Git Credentials"
     git config --global user.name "IrishBruse"
@@ -82,3 +80,5 @@ Write-Host "Install dotfiles"
         $alacrittyUrl = "https://raw.githubusercontent.com/IrishBruse/dotfiles/main/.alacritty.yml"
         $alacritty = "$env:USERPROFILE\AppData\Local\alacritty\alacritty.yml"
         Invoke-WebRequest -Uri $alacrittyUrl -OutFile $alacritty
+
+Stop-Process -processname explorer
