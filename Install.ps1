@@ -31,14 +31,15 @@ Function Section {
     }
 }
 
+
 Write-Output "-- Registry Hacks --"
+
 Section -Name "General Registry Hacks" -ScriptBlock {
     Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseSpeed 0 # Disable mouse acceleration
     Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold1 0 # Disable mouse acceleration
     Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold2 0 # Disable mouse acceleration
 
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" DisabledHotkeys V # Disable default win V shortcut Clipboard
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" DisabledHotkeys E # Disable default win E shortcut Explorerer
+    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" DisabledHotkeys VE # Disable default win V shortcut Clipboard
 
     Set-ItemProperty "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" HideRecentlyAddedApps 1 # Disable "Recently added"
 
@@ -105,10 +106,11 @@ Section -Name "Copying Alacritty Config" -ScriptBlock {
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/dotfiles/main/.alacritty.yml" -OutFile "$env:USERPROFILE\AppData\Local\alacritty\alacritty.yml"
 }
 
+
 Write-Output "-- Create task to cleanup startmenu --"
+
 Register-ScheduledJob -Name CleanUpStart -ScriptBlock { Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/IrishBruse/winstall/main/Starmenu.ps1')) } -Trigger (New-JobTrigger -Frequency="AtLogon")
 
-Write-Output "-- Sync Config Setup (W.I.P) --"
 # Section -Name "Copying Powershell Profile" -ScriptBlock {
 #     mkdir "$env:USERPROFILE\Documents\WindowsPowerShell\"
 #     $powershellConfigUrl = "https://raw.githubusercontent.com/IrishBruse/dotfiles/main/.chezmoitemplates/powershell"
@@ -123,11 +125,23 @@ Write-Output "-- Sync Config Setup (W.I.P) --"
 #     Invoke-WebRequest -Uri $alacrittyUrl -OutFile $alacritty
 # }
 
+
+Write-Output "-- Enabling optional windows features --"
+
+Section -Name "Enabling WSL" -ScriptBlock {
+    Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux Microsoft-Windows-Subsystem-Linux
+}
+
+Section -Name "Disabling Internet " -ScriptBlock {
+    Disable-WindowsOptionalFeature -Online -FeatureName Internet-Explorer-Optional-amd64
+}
+
+
 Write-Output "-- Setup Winget --"
 
-Section -Name "2 Min wait" -ScriptBlock {
+Section -Name "Install Microsoft Store" -ScriptBlock {
     wsreset -i
-    TimeOut 120
+    Timeout 120
 }
 
 Section -Name "Install Visual C" -ScriptBlock {
@@ -143,4 +157,12 @@ Section -Name "Install Winget package manager" -ScriptBlock {
 Section -Name "Install Winget Packages" -ScriptBlock {
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/main/packages.json" -OutFile $env:TEMP/packages.json
     winget import $env:TEMP/packages.json
+}
+
+
+Write-Output "-- Sync Configs (W.I.P) --"
+
+Section -Name "Ditto Portable Settings" -ScriptBlock {
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/main/Ditto.Settings" -OutFile "C:\Program Files\Ditto\Ditto.Settings"
+    New-Item "C:\Program Files\Ditto\portable"
 }

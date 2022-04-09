@@ -24,7 +24,6 @@
 				{"PackageIdentifier": "Microsoft.Teams"},
 				{"PackageIdentifier": "Microsoft.VisualStudioCode"},
 				{"PackageIdentifier": "Microsoft.dotnetRuntime.6-x64"},
-				{"PackageIdentifier": "FrancescoSorge.PasteIntoFile"},
 				{"PackageIdentifier": "Microsoft.dotnet"},
 				{"PackageIdentifier": "gerardog.gsudo"},
 				{"PackageIdentifier": "Rustlang.Rust.GNU"},
