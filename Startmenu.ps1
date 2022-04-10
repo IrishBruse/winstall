@@ -1,50 +1,66 @@
 # Remove empty directories locally
 Function StartMenuCleanup($path) {
-    Get-ChildItem $path -recurse -include Uninstall* | remove-item -ErrorAction "SilentlyContinue"
-    Get-ChildItem $path -recurse -include Help* | remove-item -ErrorAction "SilentlyContinue"
-    Get-ChildItem $path -recurse -include *Help | remove-item -ErrorAction "SilentlyContinue"
-    Get-ChildItem $path -recurse -include *Manuals* | remove-item -ErrorAction "SilentlyContinue"
-    Get-ChildItem $path -recurse -include *Docs* | remove-item -ErrorAction "SilentlyContinue"
-    Get-ChildItem $path -recurse -include *Python* | remove-item -ErrorAction "SilentlyContinue"
-    Get-ChildItem $path -recurse -include *.url | remove-item -ErrorAction "SilentlyContinue"
-
-    Get-ChildItem -Path $path -recurse -include *.lnk -File | Move-Item -Destination $path -ErrorAction "SilentlyContinue"
+    Get-ChildItem $path -recurse -include *Uninstall* | Remove-Item
+    Get-ChildItem $path -recurse -include *Help* | Remove-Item
+    Get-ChildItem $path -recurse -include *Manuals* | Remove-Item
+    Get-ChildItem $path -recurse -include *Docs* | Remove-Item
+    Get-ChildItem $path -recurse -include *Python* | Remove-Item
+    Get-ChildItem $path -recurse -include *.url | Remove-Item
 }
 
-# Remove empty directories locally
+# Remove empty directories recusively
 Function RemoveEmptyFoldersFromStart($path) {
-    # Go through each subfolder,
     Foreach ($subFolder in Get-ChildItem -Force -Literal $path -Directory) {
-        # Call the function recursively
         RemoveEmptyFoldersFromStart -path $subFolder.FullName
     }
-    # Get all child itemse
     $subItems = Get-ChildItem -Force:$getHiddelFiles -LiteralPath $path
-    # If there are no items, then we can delete the folder
-    # Exluce folder: If (($subItems -eq $null) -and (-Not($path.contains("DfsrPrivate"))))
     If ($null -eq $subItems) {
-        Write-Host "`n`nRemoving empty folder '${path}'`n`n"
-        Remove-Item -Force -Recurse:$removeHiddenFiles -LiteralPath $Path -ErrorAction "SilentlyContinue"
+        Write-Host "Removing empty folder '${path}'"
+        Remove-Item -Force -Recurse:$removeHiddenFiles -LiteralPath $Path
     }
 }
 
-Function RemoveAppFromStart($folder) {
-    Remove-Item -path "$startfolder${folder}" -recurse -Force -ErrorAction "SilentlyContinue"
+$startfolder = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\"
+$userStartfolder = "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\"
+
+Function RemoveFolderFromStart($folder) {
+    Remove-Item -path "$startfolder$folder" -recurse -Force -ErrorAction "SilentlyContinue"
+    Write-Host "Removed '$startfolder$folder'"
 }
 
-$startfolder = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\";
+Copy-Item "$userStartfolder" -Destination "$startfolder..\" -Recurse -Force
+mkdir "$startfolder\Windows\" -ErrorAction "SilentlyContinue"
+Remove-Item "$startfolder" -Recurse -Include "Administrative Tools.lnk"
+Move-Item "$startfolder\Accessibility\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Move-Item "$startfolder\Accessories\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Move-Item "$startfolder\Administrative Tools\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Move-Item "$startfolder\Windows PowerShell\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Move-Item "$startfolder\System Tools\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Remove-Item -Path "$userStartfolder\*\" -recurse -Force
 
-Move-Item -Path "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\*" -Destination "$startfolder" -PassThru -ErrorAction "SilentlyContinue"
+Remove-Item "$startfolder" -Recurse -Include "Notepad.lnk"
+Remove-Item "$startfolder" -Recurse -Include "Paint.lnk"
+Remove-Item "$startfolder" -Recurse -Include "Wordpad.lnk"
+Remove-Item "$startfolder" -Recurse -Include "Windows Media Player.lnk"
+Remove-Item "$startfolder" -Recurse -Include "Steps Recorder.lnk"
+Remove-Item "$startfolder" -Recurse -Include "Snipping Tool.lnk"
+Remove-Item "$startfolder" -Recurse -Include "Internet Explorer.lnk"
+Remove-Item "$startfolder" -Recurse -Include "Character Map.lnk"
 
-RemoveAppFromStart("Git")
-RemoveAppFromStart("Rust")
-RemoveAppFromStart("Accessories")
-RemoveAppFromStart("Node.js")
-RemoveAppFromStart("Java")
-RemoveAppFromStart("Windows Kits")
-RemoveAppFromStart("Visual Studio 2022")
+RemoveFolderFromStart("Git")
+RemoveFolderFromStart("Rust")
+RemoveFolderFromStart("Node.js")
+RemoveFolderFromStart("Java")
+RemoveFolderFromStart("Pandoc")
+RemoveFolderFromStart("Maintenance")
+RemoveFolderFromStart("Windows Kits")
+RemoveFolderFromStart("Visual Studio 2022")
 
-StartMenuCleanup -path "$startfolder"
-RemoveEmptyFoldersFromStart -path "$startfolder"
+StartMenuCleanup("$startfolder")
 
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/main/Settings-start.lnk" -OutFile "${startfolder}/Startup/Settings-Start.lnk"
+Move-Item -Path "$startfolder\*\*.lnk" -Destination "$startfolder\" -Exclude "$startfolder\Windows\" -Force -PassThru -ErrorAction "SilentlyContinue"
+
+try {
+    Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/main/Settings-start.lnk" -OutFile "${startfolder}/Settings-Start.lnk" -PassThru
+}
+catch {}
