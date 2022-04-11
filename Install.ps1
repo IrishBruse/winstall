@@ -166,8 +166,8 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/ma
 $shortcut = "$env:APPDATA/Microsoft\Windows\Start Menu\Programs\Settings Clean Startmenu.lnk"
 $WshShell = New-Object -comObject WScript.Shell
 $Shortcut = $WshShell.CreateShortcut($shortcut)
-$ShortCut.TargetPath="PowerShell"
-$ShortCut.Arguments="-Verb runas -Command $env:APPDATA/Startmenu.ps1"
+$ShortCut.TargetPath="PowerShell.exe"
+$ShortCut.Arguments="-Command `"Start-Process powershell -Verb runas -ArgumentList '-Command','$env:APPDATA/Startmenu.ps1'`""
 $Shortcut.Save()
 Write-Output "Done`n"
 
