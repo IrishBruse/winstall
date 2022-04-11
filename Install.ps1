@@ -1,165 +1,193 @@
 # Prompt that admin is needed
-$id = [System.Security.Principal.WindowsIdentity]::GetCurrent()
-$p = New-Object System.Security.Principal.WindowsPrincipal($id)
+$p = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
 if (!$p.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
     Write-Output "Run as Administrator!"
     break;
 }
 
-Function Section {
-    Param (
-        [parameter(Mandatory)]
-        [String]$Name,
-        [parameter(Mandatory)]
-        [Object]$ScriptBlock
-    )
 
-    Begin {
-        Write-Output "$Name"
-        If ($PSBoundParameters['Name']) {
-            If ($ScriptBlock -isnot [scriptblock]) {
-                $ScriptBlock = [scriptblock]::Create("Write-Output($Name)")
-            }
-        }
-    }
 
-    Process {
-        $ScriptBlock.InvokeReturnAsIs()
-        Write-Output "Done $Name`n"
-    }
+
+Write-Output "General Registry Hacks"
+Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseSpeed 0 # Disable mouse acceleration
+Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold1 0 # Disable mouse acceleration
+Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold2 0 # Disable mouse acceleration
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" DisabledHotkeys V # Disable default win V shortcut Clipboard
+Set-ItemProperty "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" HideRecentlyAddedApps 1 # Disable "Recently added"
+Set-ItemProperty "HKCU:\Control Panel\Desktop" LogPixels 96 # Set scaling to 100%
+Set-ItemProperty "HKCU:\Control Panel\Desktop" Win8DpiScaling 1 # Set scaling to 100%
+Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\sppsvc\" Start 0 # Start this services
+Write-Output "Done`n"
+
+
+
+
+Write-Output "Taskbar Registry Hacks"
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ExtendedUIHoverTime 50000 # disable aero peek
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" Hidden 1
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" HideFileExt 0 # enable file extensions
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" LaunchTo 1 # Change Open File Explorer to This PC
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" MMTaskbarEnabled 1 # Enable task bar on other monitors
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" MMTaskbarGlomLevel 2 # Dont Combine Taskbar on other monitors
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" MMTaskbarMode 2 # Taskbar where window is open
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" TaskbarGlomLevel 2 # Dont Combine Taskbar
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ShowSuperHidden 0 # Dont Shows desktop.ini
+Write-Output "Done`n"
+
+
+
+
+Write-Output "Theme Colors"
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Accent" AccentColorMenu 4282927692
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\DWM" AccentColor 4282927692
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\DWM" AccentColorInactive 4282927692
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\DWM" ColorPrevalence 1
+Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" ColorPrevalence 1
+Write-Output "Done`n"
+
+
+
+
+Write-Output "Removing This PC Folders"
+Write-Host "    Removed Desktop From This PC"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}\" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}" -Force -Verbose -ErrorAction "SilentlyContinue"
+
+Write-Host "    Removed Documents From This PC"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{A8CDFF1C-4878-43be-B5FD-F8091C1C60D0}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{d3162b92-9365-467a-956b-92703aca08af}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{A8CDFF1C-4878-43be-B5FD-F8091C1C60D0}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{d3162b92-9365-467a-956b-92703aca08af}" -Force -Verbose -ErrorAction "SilentlyContinue"
+
+Write-Host "    Removed Downloads From This PC"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{088e3905-0323-4b02-9826-5d99428e115f}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{374DE290-123F-4565-9164-39C4925E467B}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{088e3905-0323-4b02-9826-5d99428e115f}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{374DE290-123F-4565-9164-39C4925E467B}" -Force -Verbose -ErrorAction "SilentlyContinue"
+
+Write-Host "    Removed Music From This PC"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{1CF1260C-4DD0-4ebb-811F-33C572699FDE}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3dfdf296-dbec-4fb4-81d1-6a3438bcf4de}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{1CF1260C-4DD0-4ebb-811F-33C572699FDE}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3dfdf296-dbec-4fb4-81d1-6a3438bcf4de}" -Force -Verbose -ErrorAction "SilentlyContinue"
+
+Write-Host "    Removed Pictures From This PC"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{24ad3ad4-a569-4530-98e1-ab02f9417aa8}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3ADD1653-EB32-4cb0-BBD7-DFA0ABB5ACCA}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{24ad3ad4-a569-4530-98e1-ab02f9417aa8}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3ADD1653-EB32-4cb0-BBD7-DFA0ABB5ACCA}" -Force -Verbose -ErrorAction "SilentlyContinue"
+
+Write-Host "    Removed Videos From This PC"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{A0953C92-50DC-43bf-BE83-3742FED03C9C}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{f86fa3ab-70d2-4fc7-9c99-fcbf05467f3a}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{A0953C92-50DC-43bf-BE83-3742FED03C9C}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{f86fa3ab-70d2-4fc7-9c99-fcbf05467f3a}" -Force -Verbose -ErrorAction "SilentlyContinue"
+
+Write-Host "    Removed 3d Objects From This PC"
+Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Force -Verbose -ErrorAction "SilentlyContinue"
+Write-Output "Done`n"
+
+
+
+
+Write-Output "Optional Windows Features"
+Write-Output "    Enabling Microsoft-Windows-Subsystem-Linux"
+try{ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux }catch{}
+
+Write-Output "    Disabling Internet-Explorer-Optional-amd64"
+try{ Disable-WindowsOptionalFeature -Online -FeatureName Internet-Explorer-Optional-amd64 }catch{}
+Write-Output "Done`n"
+
+
+
+
+Write-Output "Setup Winget"
+if (Get-Command "winget" -ErrorAction SilentlyContinue) {
+    Write-Output "    Winget Already Installed Skipping"
 }
+else {
+    Write-Output "    Installing Microsoft Store"
+    wsreset -i
+    Timeout 120
 
-Section -Name "General Registry Hacks" -ScriptBlock {
-    Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseSpeed 0 # Disable mouse acceleration
-    Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold1 0 # Disable mouse acceleration
-    Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold2 0 # Disable mouse acceleration
+    Write-Output "    Installing Visual C"
+    Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "$env:TEMP/Microsoft.VCLibs.x64.14.00.Desktop.appx"
+    add-appxpackage -Path "$env:TEMP/Microsoft.VCLibs.x64.14.00.Desktop.appx"
 
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" DisabledHotkeys V # Disable default win V shortcut Clipboard
+    Write-Output "    Installing Winget Package Manager"
+    Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile "$env:TEMP/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
+    add-appxpackage -Path "$env:TEMP/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
 
-    Set-ItemProperty "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" HideRecentlyAddedApps 1 # Disable "Recently added"
+    Write-Output "    Installing Winget Programming Libraries"
+    winget install OpenJS.NodeJS.LTS
+    winget install Python.Python.3
+    winget install Rustlang.Rust.GNU
+    winget install GoLang.Go
+    winget install Microsoft.dotnet
+    winget install Microsoft.dotnetRuntime.6-x64
 
-    Set-ItemProperty "HKCU:\Control Panel\Desktop" LogPixels 96 # Set scaling to 100%
-    Set-ItemProperty "HKCU:\Control Panel\Desktop" Win8DpiScaling 1 # Set scaling to 100%
+    Write-Output "    Installing Winget Software"
+    winget install 7zip.7zip
+    winget install Alacritty.Alacritty
+    winget install AntibodySoftware.WizTree
+    winget install clsid2.mpc-hc
+    winget install deepnight.LDtk
+    winget install Discord.Discord
+    winget install Ditto.Ditto
+    winget install gerardog.gsudo
+    winget install Git.Git
+    winget install Klocman.BulkCrapUninstaller
+    winget install Microsoft.Edge
+    winget install Microsoft.EdgeWebView2Runtime
+    winget install Microsoft.Teams
+    winget install Microsoft.VisualStudioCode
+    winget install Microsoft.WingetCreate
+    winget install Rufus.Rufus
+    winget install SoftDeluxe.FreeDownloadManager
+    winget install TGRMNSoftware.BulkRenameUtility
+    winget install UnityTechnologies.UnityHub
+    RefreshEnv.cmd
 
-    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\sppsvc\" Start 4 # Start this services
+    Write-Output "    Installing Npm Global Tools"
+    npm install -g @angular/cli
+    npm install -g @ionic/cli
+    npm install -g @vue/cli
+    npm install -g quicktype
+    npm install -g vsce
+    npm install -g cordova
 }
+Write-Output "Done`n"
 
-Section -Name "Taskbar Registry Hacks" -ScriptBlock {
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ExtendedUIHoverTime 50000 # disable aero peek
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" Hidden 1
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" HideFileExt 0 # enable file extensions
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" LaunchTo 1 # Change Open File Explorer to This PC
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" MMTaskbarEnabled 1 # Enable task bar on other monitors
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" MMTaskbarGlomLevel 2 # Dont Combine Taskbar on other monitors
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" MMTaskbarMode 2 # Taskbar where window is open
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ShowSuperHidden 0 # Shows desktop.ini
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" TaskbarGlomLevel 2 # Dont Combine Taskbar
-}
 
-Section -Name "Theme Colors" -ScriptBlock {
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Accent" AccentColorMenu 4282927692
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\DWM" AccentColor 4282927692
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\DWM" AccentColorInactive 4282927692
-    Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\DWM" ColorPrevalence 1
-    Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" ColorPrevalence 1
-}
 
-Section -Name "Removing This PC Folders" -ScriptBlock {
-    Write-Host "    Removed Desktop From This PC"
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}\" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{B4BFCC3A-DB2C-424C-B029-7FE99A87C641}" -Force -Verbose
+Write-Output "Create Shortcut To Cleanup Startmenu"
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/main/Startmenu.ps1" -OutFile "$env:APPDATA/Startmenu.ps1"
+$shortcut = "$env:APPDATA/Microsoft\Windows\Start Menu\Programs\Settings Clean Startmenu.lnk"
+$WshShell = New-Object -comObject WScript.Shell
+$Shortcut = $WshShell.CreateShortcut($shortcut)
+$ShortCut.TargetPath="PowerShell"
+$ShortCut.Arguments="-Verb runas -Command $env:APPDATA/Startmenu.ps1"
+$Shortcut.Save()
+Write-Output "Done`n"
 
-    Write-Host "    Removed Documents From This PC"
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{A8CDFF1C-4878-43be-B5FD-F8091C1C60D0}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{d3162b92-9365-467a-956b-92703aca08af}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{A8CDFF1C-4878-43be-B5FD-F8091C1C60D0}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{d3162b92-9365-467a-956b-92703aca08af}" -Force -Verbose
 
-    Write-Host "    Removed Downloads From This PC"
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{088e3905-0323-4b02-9826-5d99428e115f}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{374DE290-123F-4565-9164-39C4925E467B}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{088e3905-0323-4b02-9826-5d99428e115f}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{374DE290-123F-4565-9164-39C4925E467B}" -Force -Verbose
 
-    Write-Host "    Removed Music From This PC"
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{1CF1260C-4DD0-4ebb-811F-33C572699FDE}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3dfdf296-dbec-4fb4-81d1-6a3438bcf4de}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{1CF1260C-4DD0-4ebb-811F-33C572699FDE}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3dfdf296-dbec-4fb4-81d1-6a3438bcf4de}" -Force -Verbose
 
-    Write-Host "    Removed Pictures From This PC"
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{24ad3ad4-a569-4530-98e1-ab02f9417aa8}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3ADD1653-EB32-4cb0-BBD7-DFA0ABB5ACCA}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{24ad3ad4-a569-4530-98e1-ab02f9417aa8}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{3ADD1653-EB32-4cb0-BBD7-DFA0ABB5ACCA}" -Force -Verbose
+Write-Output "Sync Configs (W.I.P)"
+Write-Output "Done`n"
 
-    Write-Host "    Removed Videos From This PC"
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{A0953C92-50DC-43bf-BE83-3742FED03C9C}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{f86fa3ab-70d2-4fc7-9c99-fcbf05467f3a}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{A0953C92-50DC-43bf-BE83-3742FED03C9C}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{f86fa3ab-70d2-4fc7-9c99-fcbf05467f3a}" -Force -Verbose
 
-    Write-Host "    Removed 3d Objects From This PC"
-    Remove-Item -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Force -Verbose
-    Remove-Item -Path "HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Explorer\MyComputer\NameSpace\{0DB7E03F-FC29-4DC6-9020-FF41B59E513A}" -Force -Verbose
-}
 
-Section -Name "Create task to cleanup startmenu and run it" -ScriptBlock {
-    Register-ScheduledJob -Name CleanUpStart -ScriptBlock { Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/IrishBruse/winstall/main/Starmenu.ps1')) } -Trigger (New-JobTrigger -Frequency="AtLogon")
-    Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/IrishBruse/winstall/main/Starmenu.ps1'))
-}
 
-Section -Name "Optional Windows Features" -ScriptBlock {
-    Section -Name "Enabling WSL" -ScriptBlock {
-        Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
-    }
+Write-Output "Setting git config --global"
+git config --global user.name "IrishBruse"
+git config --global user.email "Econn50@outlook.com"
+git config --global init.defaultBranch main
+Write-Output "Done`n"
 
-    Section -Name "Disabling Internet Explorer" -ScriptBlock {
-        Disable-WindowsOptionalFeature -Online -FeatureName Internet-Explorer-Optional-amd64
-    }
-}
 
-Section -Name "Setup Winget" -ScriptBlock {
-    try {
-        if (Get-Command "winget") {
-            Write-Output "winget already installed skipping"
-        }
-    }
-    Catch {
-        Section -Name "Install Microsoft Store" -ScriptBlock {
-            wsreset -i
-            Timeout 120
-        }
 
-        Section -Name "Install Visual C" -ScriptBlock {
-            Invoke-WebRequest -Uri "https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx" -OutFile "$env:TEMP/Microsoft.VCLibs.x64.14.00.Desktop.appx"
-            add-appxpackage -Path "$env:TEMP/Microsoft.VCLibs.x64.14.00.Desktop.appx"
-        }
-
-        Section -Name "Install Winget package manager" -ScriptBlock {
-            Invoke-WebRequest -Uri "https://github.com/microsoft/winget-cli/releases/latest/download/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle" -OutFile "$env:TEMP/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-            add-appxpackage -Path "$env:TEMP/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle"
-        }
-
-        Section -Name "Install Winget Packages" -ScriptBlock {
-            Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/main/packages.json" -OutFile $env:TEMP/packages.json
-            winget import $env:TEMP/packages.json
-        }
-    }
-}
-
-Section -Name "Sync Configs (W.I.P)" -ScriptBlock {
-    Section -Name "    Ditto Portable Settings" -ScriptBlock {
-        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/main/Ditto.Settings" -OutFile "C:\Program Files\Ditto\Ditto.Settings"
-        New-Item "C:\Program Files\Ditto\portable"
-    }
-}
-
-Section -Name "Config git credentials" -ScriptBlock {
-    git config --global user.name "IrishBruse"
-    git config --global user.email "Econn50@outlook.com"
-    git config --global init.defaultBranch main
-}
-
-# Restart explorer
+Write-Output "Restarting Explorerer"
 Stop-Process -processName: Explorer
+Write-Output "Done`n"

@@ -1,3 +1,11 @@
+# Prompt that admin is needed
+$id = [System.Security.Principal.WindowsIdentity]::GetCurrent()
+$p = New-Object System.Security.Principal.WindowsPrincipal($id)
+if (!$p.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
+    Write-Output "Run as Administrator!"
+    break;
+}
+
 # Remove empty directories locally
 Function StartMenuCleanup($path) {
     Get-ChildItem $path -recurse -include *Uninstall* | Remove-Item
@@ -20,32 +28,32 @@ Function RemoveEmptyFoldersFromStart($path) {
     }
 }
 
-$startfolder = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\"
+$startfolder = "$env:ProgramData\Microsoft\Windows\Start Menu\Programs\"
 $userStartfolder = "$env:USERPROFILE\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\"
 
 Function RemoveFolderFromStart($folder) {
-    Remove-Item -path "$startfolder$folder" -recurse -Force -ErrorAction "SilentlyContinue"
-    Write-Host "Removed '$startfolder$folder'"
+    Remove-Item -path "$userStartfolder$folder" -recurse -Force -ErrorAction "SilentlyContinue"
+    Write-Host "Removed '$userStartfolder$folder'"
 }
 
-Copy-Item "$userStartfolder" -Destination "$startfolder..\" -Recurse -Force
-mkdir "$startfolder\Windows\" -ErrorAction "SilentlyContinue"
-Remove-Item "$startfolder" -Recurse -Include "Administrative Tools.lnk"
-Move-Item "$startfolder\Accessibility\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
-Move-Item "$startfolder\Accessories\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
-Move-Item "$startfolder\Administrative Tools\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
-Move-Item "$startfolder\Windows PowerShell\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
-Move-Item "$startfolder\System Tools\" -Destination "$startfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
-Remove-Item -Path "$userStartfolder\*\" -recurse -Force
+Copy-Item "$startfolder" -Destination "$userStartfolder..\" -Recurse -Force
+mkdir "$userStartfolder\Windows\" -ErrorAction "SilentlyContinue"
+Remove-Item "$userStartfolder" -Recurse -Include "Administrative Tools.lnk"
+Move-Item "$userStartfolder\Accessibility\" -Destination "$userStartfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Move-Item "$userStartfolder\Accessories\" -Destination "$userStartfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Move-Item "$userStartfolder\Administrative Tools\" -Destination "$userStartfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Move-Item "$userStartfolder\Windows PowerShell\" -Destination "$userStartfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Move-Item "$userStartfolder\System Tools\" -Destination "$userStartfolder\Windows\" -Force -ErrorAction "SilentlyContinue"
+Remove-Item -Path "$startfolder\*\" -recurse -Force
 
-Remove-Item "$startfolder" -Recurse -Include "Notepad.lnk"
-Remove-Item "$startfolder" -Recurse -Include "Paint.lnk"
-Remove-Item "$startfolder" -Recurse -Include "Wordpad.lnk"
-Remove-Item "$startfolder" -Recurse -Include "Windows Media Player.lnk"
-Remove-Item "$startfolder" -Recurse -Include "Steps Recorder.lnk"
-Remove-Item "$startfolder" -Recurse -Include "Snipping Tool.lnk"
-Remove-Item "$startfolder" -Recurse -Include "Internet Explorer.lnk"
-Remove-Item "$startfolder" -Recurse -Include "Character Map.lnk"
+Remove-Item "$userStartfolder" -Recurse -Include "Notepad.lnk"
+Remove-Item "$userStartfolder" -Recurse -Include "Paint.lnk"
+Remove-Item "$userStartfolder" -Recurse -Include "Wordpad.lnk"
+Remove-Item "$userStartfolder" -Recurse -Include "Windows Media Player.lnk"
+Remove-Item "$userStartfolder" -Recurse -Include "Steps Recorder.lnk"
+Remove-Item "$userStartfolder" -Recurse -Include "Snipping Tool.lnk"
+Remove-Item "$userStartfolder" -Recurse -Include "Internet Explorer.lnk"
+Remove-Item "$userStartfolder" -Recurse -Include "Character Map.lnk"
 
 RemoveFolderFromStart("Git")
 RemoveFolderFromStart("Rust")
@@ -56,9 +64,13 @@ RemoveFolderFromStart("Maintenance")
 RemoveFolderFromStart("Windows Kits")
 RemoveFolderFromStart("Visual Studio 2022")
 
-StartMenuCleanup("$startfolder")
+StartMenuCleanup("$userStartfolder")
 
-Move-Item -Path "$startfolder\*\*.lnk" -Destination "$startfolder\" -Exclude "$startfolder\Windows\" -Force -PassThru -ErrorAction "SilentlyContinue"
+Move-Item -Path "$userStartfolder\*\*.lnk" -Destination "$userStartfolder\" -Exclude "$userStartfolder\Windows\" -Force -PassThru -ErrorAction "SilentlyContinue"
+
+Start-Sleep 1
+
+RemoveEmptyFoldersFromStart("$userStartfolder")
 
 try {
     Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/main/Settings-start.lnk" -OutFile "${startfolder}/Settings-Start.lnk" -PassThru
