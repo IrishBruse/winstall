@@ -95,10 +95,11 @@ Write-Output "Done`n"
 
 
 Write-Output "Setup Winget"
+Write-Output "Install winget sofware 'y' or 'n'"
 # Check if winget is installed
-if (Test-Path ~\AppData\Local\Microsoft\WindowsApps\winget.exe) {
+$response = Read-Host -Prompt $msg
+if ($response -eq 'y') {
     Write-Output "    Winget Already Installed Skipping"
-
 }
 else {
     # Installing winget from the Microsoft Store
