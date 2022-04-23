@@ -1,10 +1,4 @@
-# Prompt that admin is needed
-$id = [System.Security.Principal.WindowsIdentity]::GetCurrent()
-$p = New-Object System.Security.Principal.WindowsPrincipal($id)
-if (!$p.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Output "Run as Administrator!"
-    break;
-}
+#Requires -RunAsAdministrator
 
 # Remove empty directories locally
 Function StartMenuCleanup($path) {

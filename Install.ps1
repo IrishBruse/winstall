@@ -1,18 +1,10 @@
-# Prompt that admin is needed
-$p = New-Object System.Security.Principal.WindowsPrincipal([System.Security.Principal.WindowsIdentity]::GetCurrent())
-if (!$p.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Output "Run as Administrator!"
-    break;
-}
-
-
-
+#Requires -RunAsAdministrator
 
 Write-Output "General Registry Hacks"
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseSpeed 0 # Disable mouse acceleration
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold1 0 # Disable mouse acceleration
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold2 0 # Disable mouse acceleration
-Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" DisabledHotkeys V # Disable default win V shortcut Clipboard
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" DisabledHotkeys V # Disable default win V shortcut Clipboard P for color picker
 Set-ItemProperty "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" HideRecentlyAddedApps 1 # Disable "Recently added"
 Set-ItemProperty "HKCU:\Control Panel\Desktop" LogPixels 96 # Set scaling to 100%
 Set-ItemProperty "HKCU:\Control Panel\Desktop" Win8DpiScaling 1 # Set scaling to 100%
@@ -93,20 +85,31 @@ Write-Output "Done`n"
 
 Write-Output "Optional Windows Features"
 Write-Output "    Enabling Microsoft-Windows-Subsystem-Linux"
-try{ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux }catch{}
+try { Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux }catch {}
 
 Write-Output "    Disabling Internet-Explorer-Optional-amd64"
-try{ Disable-WindowsOptionalFeature -Online -FeatureName Internet-Explorer-Optional-amd64 }catch{}
+try { Disable-WindowsOptionalFeature -Online -FeatureName Internet-Explorer-Optional-amd64 }catch {}
 Write-Output "Done`n"
 
 
 
 
 Write-Output "Setup Winget"
-if (Get-Command "winget" -ErrorAction SilentlyContinue) {
+# Check if winget is installed
+if (Test-Path ~\AppData\Local\Microsoft\WindowsApps\winget.exe) {
     Write-Output "    Winget Already Installed Skipping"
+
 }
 else {
+    # Installing winget from the Microsoft Store
+    Write-Host "Winget not found, installing it now."
+    $ResultText.text = "`r`n" + "`r`n" + "Installing Winget... Please Wait"
+    Start-Process "ms-appinstaller:?source=https://aka.ms/getwinget"
+    $nid = (Get-Process AppInstaller).Id
+    Wait-Process -Id $nid
+    Write-Host Winget Installed
+    $ResultText.text = "`r`n" + "`r`n" + "Winget Installed - Ready for Next Task"
+
     Write-Output "    Installing Microsoft Store"
     wsreset -i
     Timeout 120
@@ -126,6 +129,7 @@ else {
     winget install GoLang.Go
     winget install Microsoft.dotnet
     winget install Microsoft.dotnetRuntime.6-x64
+    winget install LLVM.LLVM
 
     Write-Output "    Installing Winget Software"
     winget install 7zip.7zip
@@ -145,7 +149,6 @@ else {
     winget install Microsoft.WingetCreate
     winget install Rufus.Rufus
     winget install SoftDeluxe.FreeDownloadManager
-    winget install TGRMNSoftware.BulkRenameUtility
     winget install UnityTechnologies.UnityHub
     RefreshEnv.cmd
 
@@ -156,8 +159,26 @@ else {
     npm install -g quicktype
     npm install -g vsce
     npm install -g cordova
+
+    Write-Output "    Installing Npm Global Tools"
+
 }
 Write-Output "Done`n"
+
+
+
+
+Write-Output "Remove from right click context menu"
+Remove-Item -Path "HKCR:\Directory\shell\git_gui" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
+Remove-Item -Path "HKCR:\Directory\shell\git_shell" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
+Remove-Item -Path "HKCR:\LibraryFolder\background\shell\git_gui" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
+Remove-Item -Path "HKCR:\LibraryFolder\background\shell\git_shell" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
+Remove-Item -Path "HKCR:\Directory\shell\WizTree" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
+Remove-Item -Path "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_gui" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
+Remove-Item -Path "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_shell" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
+Remove-Item -Path "HKLM:\SOFTWARE\Classes\Directory\background\shell\cmd\AnyCode" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
+Write-Output "Done`n"
+
 
 
 
@@ -166,8 +187,8 @@ Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/ma
 $shortcut = "$env:APPDATA/Microsoft\Windows\Start Menu\Programs\Settings Clean Startmenu.lnk"
 $WshShell = New-Object -comObject WScript.Shell
 $Shortcut = $WshShell.CreateShortcut($shortcut)
-$ShortCut.TargetPath="PowerShell.exe"
-$ShortCut.Arguments="-Command `"Start-Process powershell -Verb runas -ArgumentList '-Command','$env:APPDATA/Startmenu.ps1'`""
+$ShortCut.TargetPath = "PowerShell.exe"
+$ShortCut.Arguments = "-Command `"Start-Process powershell -Verb runas -ArgumentList '-Command','$env:APPDATA/Startmenu.ps1'`""
 $Shortcut.Save()
 Write-Output "Done`n"
 
@@ -175,6 +196,12 @@ Write-Output "Done`n"
 
 
 Write-Output "Sync Configs (W.I.P)"
+$path = "C:/Path/"
+$p = (Get-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).path
+$p += ";$path"
+Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH -Value $p
+mkdir $path
+Invoke-WebRequest -Uri "https://github.com/IrishBruse/DotManager/releases/latest/download/dot.exe" -OutFile "$path/dot.exe"
 Write-Output "Done`n"
 
 
@@ -188,6 +215,7 @@ Write-Output "Done`n"
 
 
 
-Write-Output "Restarting Explorerer"
+
+Write-Output "Restarting Explorer"
 Stop-Process -processName: Explorer
 Write-Output "Done`n"
