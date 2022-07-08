@@ -7,7 +7,7 @@ Run this as admin to install
 Set-ExecutionPolicy Bypass -Scope Process -Force;iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/IrishBruse/winstall/main/Install.ps1'))
 ```
 
-Enable Small task bar on desktop
+Make taskbar big
 ```powershell
-Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" TaskbarSmallIcons 0 # Small taskbar
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" TaskbarSmallIcons 0
 ```
