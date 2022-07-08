@@ -1,6 +1,8 @@
 #Requires -RunAsAdministrator
 
-cd Desktop
+$Desktop = [Environment]::GetFolderPath("Desktop")
+
+cd $Desktop
 
 Write-Output "Activating"
 Invoke-RestMethod -Uri "https://github.com/massgravel/Microsoft-Activation-Scripts/archive/refs/tags/1.5.zip" -OutFile Activate.zip
