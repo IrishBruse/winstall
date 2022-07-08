@@ -121,9 +121,6 @@ choco install blender --version 3.2.0 -y
 Write-Output "Done`n"
 
 
-RefreshEnv.cmd
-
-
 Write-Output "Remove from right click context menu"
 Remove-Item -Path "HKCR:\Directory\shell\git_gui" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
 Remove-Item -Path "HKCR:\Directory\shell\git_shell" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
