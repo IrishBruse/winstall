@@ -136,13 +136,6 @@ Remove-Item -Path "HKLM:\SOFTWARE\Classes\Directory\background\shell\cmd\AnyCode
 Write-Output "Done`n"
 
 
-Write-Output "Setting git config --global"
-git config --global user.name "IrishBruse"
-git config --global user.email "Econn50@outlook.com"
-git config --global init.defaultBranch main
-Write-Output "Done`n"
-
-
 Write-Output "Restarting Explorer"
 Stop-Process -processName: Explorer
 Write-Output "Done`n"
