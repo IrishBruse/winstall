@@ -10,20 +10,36 @@ Expand-Archive .\Activate.zip
 .\Activate\Microsoft-Activation-Scripts-1.5\MAS\Separate-Files-Version\Activators\HWID-KMS38_Activation\HWID_Activation.cmd /a
 Write-Output "Done`n"
 
+
 Write-Output "General Registry Hacks"
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseSpeed 0 # Disable mouse acceleration
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold1 0 # Disable mouse acceleration
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold2 0 # Disable mouse acceleration
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" DisabledHotkeys V # Disable default win V shortcut Clipboard P for color picker
-Set-ItemProperty "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" HideRecentlyAddedApps 1 # Disable "Recently added"
 Set-ItemProperty "HKCU:\Control Panel\Desktop" LogPixels 96 # Set scaling to 100%
 Set-ItemProperty "HKCU:\Control Panel\Desktop" Win8DpiScaling 1 # Set scaling to 100%
 Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\sppsvc\" Start 0 # Start this services
 Write-Output "Done`n"
 
 
+Write-Output "Disable `"Recently added`""
+New-Item -Path HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer
+Set-ItemProperty "HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer" HideRecentlyAddedApps 1 # Disable "Recently added"
+Write-Output "Done`n"
+
+
+#https://superuser.com/questions/1386302/how-to-replace-the-desktop-background-image-with-a-solid-color-using-powershell
+Write-Output "Change wallpaper""
+Set-ItemProperty -Path 'HKCU:\Control Panel\Desktop' -Name 'WallPaper' -Value ''
+Stop-Process -ProcessName explorer
+shell:::{ED834ED6-4B5A-4bfe-8F11-A626DCB6A921} -Microsoft.Personalization\pageWallpaper
+$TIC=(Get-ItemProperty 'HKCU:\Control Panel\Desktop' TranscodedImageCache -ErrorAction Stop).TranscodedImageCache
+[System.Text.Encoding]::Unicode.GetString($TIC) -replace '(.+)([A-Z]:[0-9a-zA-Z\\])+','$2'
+Write-Output "Done`n"
+
+
 Write-Output "Taskbar Registry Hacks"
-Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ExtendedUIHoverTime 50000 # disable aero peek
+Set-ItemProperty "HKCU:\Control Panel\International" -Name sShortTime -Value "h:mm tt";
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" Hidden 1
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" HideFileExt 0 # enable file extensions
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" LaunchTo 1 # Change Open File Explorer to This PC
@@ -32,16 +48,19 @@ Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advan
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" MMTaskbarMode 2 # Taskbar where window is open
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" TaskbarGlomLevel 2 # Dont Combine Taskbar
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" TaskbarSmallIcons 1 # Taskbar small
+Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search"            SearchboxTaskbarMode 0 # Remove searchbox
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ShowSuperHidden 0 # Dont Shows desktop.ini
 Write-Output "Done`n"
 
 
-Write-Output "Theme Colors"
-Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Accent" AccentColorMenu 4282927692
-Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\DWM" AccentColor 4282927692
-Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\DWM" AccentColorInactive 4282927692
-Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\DWM" ColorPrevalence 1
-Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize" ColorPrevalence 1
+Write-Output "Misc Taskbar Registry Hacks"
+# Lang input
+New-Item -Path HKCU:\Software\Microsoft\CTF\LangBar
+Set-ItemProperty -Path HKCU:\Software\Microsoft\CTF\LangBar -Name ShowStatus -Value 3
+
+# Meet now
+New-Item -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer
+Set-ItemProperty -Path HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer -Name HideSCAMeetNow -Value 1
 Write-Output "Done`n"
 
 
@@ -90,35 +109,35 @@ Write-Output "Installing Chocolatey"
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 Write-Output "Done`n"
 
+$packages = @(
+    "vscode"
+    "7zi"
+    "discord"
+    "ldtk"
+    "alacritty"
+    "mpc-be"
+    "freedownloadmanager"
+    "powertoys"
+    "paint.net"
+    "git"
+    "llvm"
+    "golang"
+    "dotnet"
+    "dotnet-sdk"
+    "rust"
+    "python"
+    "nodejs"
+    "netfx-4.7.2"
+    "godot"
+    "unity-hub"
+    "blender"
+)
 
-Write-Output "Installing GUI Software"
-choco install vscode --version 1.69.0 -y
-choco install 7zip --version 22.0 -y
-choco install discord --version 1.0.9005 -y
-choco install ldtk --version 1.1.3 -y
-choco install alacritty --version 0.10.1 -y
-choco install mpc-be --version 1.6.3 -y
-choco install freedownloadmanager --version 6.16.2 -y
-Write-Output "Done`n"
-
-
-Write-Output "Installing Programming Sofware"
-choco install git --version 2.37.0 -y
-choco install llvm --version 14.0.6 -y
-choco install golang --version 1.18.3 -y
-choco install dotnet --version 6.0.6 -y
-choco install dotnet-sdk --version 6.0.301 -y
-choco install rust --version 1.61.0 -y
-choco install python --version 3.10.5 -y
-choco install nodejs --version 18.5.0 -y
-choco install netfx-4.7.2 --version 4.7.2.0 -y
-Write-Output "Done`n"
-
-
-Write-Output "Installing Game Engine Sofware"
-choco install godot --version 3.4.4 -y
-choco install unity-hub --version 3.2.0 -y
-choco install blender --version 3.2.0 -y
+Write-Output "Installing Chocolatey Software"
+foreach ($pkg in $packages)
+{
+    choco install $pkg -y
+}
 Write-Output "Done`n"
 
 
