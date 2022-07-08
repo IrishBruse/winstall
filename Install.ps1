@@ -1,5 +1,13 @@
 #Requires -RunAsAdministrator
 
+cd Desktop
+
+Write-Output "Activating"
+Invoke-RestMethod -Uri "https://github.com/massgravel/Microsoft-Activation-Scripts/archive/refs/tags/1.5.zip" -OutFile Activate.zip
+Expand-Archive .\Activate.zip
+.\Activate\Microsoft-Activation-Scripts-1.5\MAS\Separate-Files-Version\Activators\HWID-KMS38_Activation\HWID_Activation.cmd /a
+Write-Output "Done`n"
+
 Write-Output "General Registry Hacks"
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseSpeed 0 # Disable mouse acceleration
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold1 0 # Disable mouse acceleration
@@ -112,7 +120,11 @@ Write-Output "Done`n"
 Write-Output "Installing Game Engine Sofware"
 choco install godot --version 3.4.4 -y
 choco install unity-hub --version 3.2.0 -y
+choco install blender --version 3.2.0 -y
 Write-Output "Done`n"
+
+
+RefreshEnv.cmd
 
 
 Write-Output "Remove from right click context menu"
@@ -124,17 +136,6 @@ Remove-Item -Path "HKCR:\Directory\shell\WizTree" -ErrorAction "SilentlyContinue
 Remove-Item -Path "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_gui" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
 Remove-Item -Path "HKLM:\SOFTWARE\Classes\Directory\background\shell\git_shell" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
 Remove-Item -Path "HKLM:\SOFTWARE\Classes\Directory\background\shell\cmd\AnyCode" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
-Write-Output "Done`n"
-
-
-Write-Output "Create Shortcut To Cleanup Startmenu"
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/IrishBruse/winstall/main/Startmenu.ps1" -OutFile "$env:APPDATA/Startmenu.ps1"
-$shortcut = "$env:APPDATA/Microsoft\Windows\Start Menu\Programs\Settings Clean Startmenu.lnk"
-$WshShell = New-Object -comObject WScript.Shell
-$Shortcut = $WshShell.CreateShortcut($shortcut)
-$ShortCut.TargetPath = "PowerShell.exe"
-$ShortCut.Arguments = "-Command `"Start-Process powershell -Verb runas -ArgumentList '-Command','$env:APPDATA/Startmenu.ps1'`""
-$Shortcut.Save()
 Write-Output "Done`n"
 
 
