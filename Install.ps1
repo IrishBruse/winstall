@@ -85,11 +85,6 @@ Write-Output "Removing This PC Folders"
 Write-Output "Done`n"
 
 
-Write-Output "    Disabling Internet-Explorer-Optional-amd64"
-try { Disable-WindowsOptionalFeature -Online -FeatureName Internet-Explorer-Optional-amd64 }catch {}
-Write-Output "Done`n"
-
-
 Write-Output "Installing Chocolatey"
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 Write-Output "Done`n"
