@@ -143,6 +143,11 @@ foreach ($pkg in $packages)
 Write-Output "Done`n"
 
 
+Write-Output "Set choco config allowGlobalConfirmation"
+choco feature enable -n allowGlobalConfirmation
+Write-Output "Done`n"
+
+
 Write-Output "Remove from right click context menu"
 Remove-Item -Path "HKCR:\Directory\shell\git_gui" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
 Remove-Item -Path "HKCR:\Directory\shell\git_shell" -ErrorAction "SilentlyContinue" -Force -Recurse -Confirm:$false;
