@@ -131,6 +131,8 @@ $packages = @(
     "godot"
     "unity-hub"
     "blender"
+    "cascadiacode"
+    "opensans"
 )
 
 Write-Output "Installing Chocolatey Software"
