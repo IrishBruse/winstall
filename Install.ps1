@@ -119,6 +119,8 @@ $packages = @(
     "freedownloadmanager"
     "powertoys"
     "paint.net"
+    
+    # Programming
     "git"
     "llvm"
     "golang"
@@ -128,9 +130,13 @@ $packages = @(
     "python"
     "nodejs"
     "netfx-4.7.2"
+    "visualstudio2022buildtools"
+    # Game engine
     "godot"
     "unity-hub"
     "blender"
+    
+    # Fonts
     "cascadiacode"
     "opensans"
 )
