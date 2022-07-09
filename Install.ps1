@@ -131,6 +131,8 @@ $packages = @(
     "nodejs"
     "netfx-4.7.2"
     "visualstudio2022buildtools"
+    "tinycc"    
+    
     # Game engine
     "godot"
     "unity-hub"
