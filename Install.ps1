@@ -131,7 +131,7 @@ $packages = @(
     "nodejs"
     "netfx-4.7.2"
     "visualstudio2022buildtools"
-    "tinycc"    
+    "tinycc"
     
     # Game engine
     "godot"
@@ -141,6 +141,9 @@ $packages = @(
     # Fonts
     "cascadiacode"
     "opensans"
+    
+    # Misc
+    "gsudo"
 )
 
 Write-Output "Installing Chocolatey Software"
