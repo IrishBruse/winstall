@@ -127,6 +127,7 @@ $packages = @(
     "dotnet"
     "dotnet-sdk"
     "rust"
+    "rustup"
     "python"
     "nodejs"
     "netfx-4.7.2"
