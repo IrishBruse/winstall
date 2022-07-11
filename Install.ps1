@@ -119,6 +119,7 @@ $packages = @(
     "freedownloadmanager"
     "powertoys"
     "paint.net"
+    "obs"
     
     # Programming
     "git"
