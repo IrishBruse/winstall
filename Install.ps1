@@ -155,6 +155,11 @@ foreach ($pkg in $packages)
 }
 Write-Output "Done`n"
 
+refreshenv.cmd
+
+Write-Output "Install global npm packages"
+npm i -g tsc
+Write-Output "Done`n"
 
 Write-Output "Set choco config allowGlobalConfirmation"
 choco feature enable -n allowGlobalConfirmation
