@@ -134,6 +134,7 @@ $packages = @(
     "netfx-4.7.2"
     "visualstudio2022buildtools"
     "tinycc"
+    "zig"
     
     # Game engine
     "godot"
