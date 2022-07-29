@@ -7,7 +7,7 @@ cd $Desktop
 Write-Output "Activating"
 Invoke-RestMethod -Uri "https://github.com/massgravel/Microsoft-Activation-Scripts/archive/refs/tags/1.5.zip" -OutFile Activate.zip
 Expand-Archive .\Activate.zip
-.\Activate\Microsoft-Activation-Scripts-1.5\MAS\Separate-Files-Version\Activators\HWID-KMS38_Activation\HWID_Activation.cmd /a
+cmd /k "cd .\Activate\Microsoft-Activation-Scripts-1.5\MAS\Separate-Files-Version\Activators\HWID-KMS38_Activation\ && .\HWID_Activation.cmd /a"
 Write-Output "Done`n"
 
 
