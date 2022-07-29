@@ -48,6 +48,7 @@ Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advan
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" MMTaskbarMode 2 # Taskbar where window is open
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" TaskbarGlomLevel 2 # Dont Combine Taskbar
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" TaskbarSmallIcons 1 # Taskbar small
+Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ShowTaskViewButton 0 # Hide tasks button
 Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Search"            SearchboxTaskbarMode 0 # Remove searchbox
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" ShowSuperHidden 0 # Dont Shows desktop.ini
 Write-Output "Done`n"
@@ -128,7 +129,6 @@ $packages = @(
     "dotnet"
     "dotnet-sdk"
     "rust"
-    "rustup.install"
     "python"
     "nodejs"
     "netfx-4.7.2"
