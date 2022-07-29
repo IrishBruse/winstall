@@ -29,7 +29,7 @@ Write-Output "Done`n"
 
 
 #https://superuser.com/questions/1386302/how-to-replace-the-desktop-background-image-with-a-solid-color-using-powershell
-Write-Output "Change wallpaper""
+Write-Output "Change wallpaper"
 Set-ItemProperty -Path 'HKCU:\Control Panel\Desktop' -Name 'WallPaper' -Value ''
 Stop-Process -ProcessName explorer
 shell:::{ED834ED6-4B5A-4bfe-8F11-A626DCB6A921} -Microsoft.Personalization\pageWallpaper
