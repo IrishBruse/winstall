@@ -111,7 +111,7 @@ Write-Output "Done`n"
 
 $packages = @(
     "vscode"
-    "7zi"
+    "7zip"
     "discord"
     "ldtk"
     "alacritty"
@@ -134,7 +134,6 @@ $packages = @(
     "netfx-4.7.2"
     "visualstudio2022buildtools"
     "tinycc"
-    "zig"
     
     # Game engine
     "godot"
