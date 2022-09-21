@@ -142,6 +142,7 @@ $packages = @(
     
     # Fonts
     "cascadiacode"
+    "cascadiamono"
     "opensans"
     
     # Misc
