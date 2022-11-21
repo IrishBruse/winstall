@@ -21,6 +21,11 @@ Set-ItemProperty "HKCU:\Control Panel\Desktop" Win8DpiScaling 1 # Set scaling to
 Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Services\sppsvc\" Start 0 # Start this services
 Write-Output "Done`n"
 
+Write-Output "Color Registry Hacks"
+Set-ItemProperty "HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Accent" AccentColorMenu 0xff24221e
+Set-ItemProperty "HKCU:\Software\Microsoft\Windows\DWM" AccentColor 0xff24221e
+Set-ItemProperty "HKCU:\Software\Microsoft\Windows\DWM" AccentColorInactive 0xff2a2723
+Write-Output "Done`n"
 
 Write-Output "Disable `"Recently added`""
 New-Item -Path HKCU:\SOFTWARE\Policies\Microsoft\Windows\Explorer
