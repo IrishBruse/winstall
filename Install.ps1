@@ -115,6 +115,8 @@ Write-Output "Installing Chocolatey"
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 Write-Output "Done`n"
 
+choco feature enable -n allowGlobalConfirmation
+
 $packages = @(
     "vscode"
     "7zip"
