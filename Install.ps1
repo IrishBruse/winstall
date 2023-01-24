@@ -12,6 +12,8 @@ Write-Output "Done`n"
 
 set-executionpolicy remotesigned
 
+New-PSDrive -Name "HKCR" -PSProvider Registry -Root "HKEY_CLASSES_ROOT"
+
 Write-Output "General Registry Hacks"
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseSpeed 0 # Disable mouse acceleration
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseThreshold1 0 # Disable mouse acceleration
