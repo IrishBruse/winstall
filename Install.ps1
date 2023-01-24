@@ -10,6 +10,7 @@ Expand-Archive .\Activate.zip
 & "cmd /c `"cd .\Activate\Microsoft-Activation-Scripts-1.5\MAS\Separate-Files-Version\Activators\HWID-KMS38_Activation\ && .\HWID_Activation.cmd /a`""
 Write-Output "Done`n"
 
+set-executionpolicy remotesigned
 
 Write-Output "General Registry Hacks"
 Set-ItemProperty "HKCU:\Control Panel\Mouse" MouseSpeed 0 # Disable mouse acceleration
