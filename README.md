@@ -4,10 +4,28 @@ My install script for when i reinstall windows 10
 
 Run this as admin to install
 ```powershell
-Set-ExecutionPolicy Bypass -Scope Process -Force;iex ((New-Object System.Net.WebClient).DownloadString('https://raw.githubusercontent.com/IrishBruse/winstall/main/Install.ps1'))
+set-executionpolicy remotesigned
 ```
 
-Make taskbar big
+```powershell
+irm https://massgrave.dev/get | iex
+```
+
+```powershell
+irm raw.githubusercontent.com/IrishBruse/winstall/main/Registry.ps1 | iex
+```
+
+```powershell
+irm raw.githubusercontent.com/IrishBruse/winstall/main/Explorer.ps1 | iex
+```
+
+```powershell
+irm raw.githubusercontent.com/IrishBruse/winstall/main/Choco.ps1 | iex
+```
+
+Make taskbar big for (laptop)
 ```powershell
 Set-ItemProperty "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced" TaskbarSmallIcons 0
 ```
+
+https://superuser.com/questions/1245923/registry-keys-to-change-personalization-settings#1395560
